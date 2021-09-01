@@ -1,4 +1,5 @@
-﻿using Kata.ShoppingCart.Interfaces;
+﻿using Kata.ShoppingCart.Exceptions;
+using Kata.ShoppingCart.Interfaces;
 using Kata.ShoppingCart.Repositories;
 
 namespace Kata.ShoppingCart
@@ -16,11 +17,21 @@ namespace Kata.ShoppingCart
 
         public decimal GetTotal(string productCodes)
         {
+            if (productCodes == null)
+            {
+                return 0;
+            }
+
             var shoppingCart = new ShoppingCart();
 
             foreach (char code in productCodes)
             {
                 var product = _productsRepo.GetOne(code);
+
+                if (product == null)
+                {
+                    throw new ProductMissingException(code);
+                }
 
                 shoppingCart.AddProductToCart(product);
             }

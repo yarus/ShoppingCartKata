@@ -134,8 +134,24 @@ When this will be done we should be able to run the test and make it green.
 
 ### Implement discounts
 
-Strategy pattern.
+Now we are ready to define the second part of our requirements - discounts. In requirements we have 1 type of discounts defined - quantity discounts.
+
+|A   |50   |3 for 130 |
+
+Base price of 3 products 'A' is 50*3=150. But we have a discount which means that instead of paying 150, client can pay 130. This discount can be applied for every 3 items
+of this product in our ShoppingCart.
+
+First thing to do is to define a IDiscount interface. Since discount is product-based, than it should have ProductId of the product to which this discount can be applied.
+Also, it should have GetDiscountedTotal method which going to return discounted total price for the item. Having this interface defined we can now implement our QuantityDiscout class.
+
+Since total price per product may vary based on applied discounts we need to define a new class called CheckoutItem which would store a CartItem and its total price with all discounts applied.
+
+In order to register and retrieve available discounts we are going to implement IDiscountRepository inteface and in our test project we are going to create TestDiscountRepository to use it as a stub.
+
+Now we just need to glue everything together and define test scenarios to cover our discounts flow.
 
 ### Cover edge cases
 
-Can I break your component somehow?
+Q: Can I break your component somehow?
+A: We need to make sure that all product code which we provide as input are exist in our ProductRepository. If product is not register we should fail with some custom exception. This scenario has to be covered.
+We also need to validate if we can set our products code list to null.
