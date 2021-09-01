@@ -153,5 +153,11 @@ Now we just need to glue everything together and define test scenarios to cover 
 ### Cover edge cases
 
 Q: Can I break your component somehow?
-A: We need to make sure that all product code which we provide as input are exist in our ProductRepository. If product is not register we should fail with some custom exception. This scenario has to be covered.
+
+A: We need to make sure that all product code which we provide as input are exist in our ProductRepository. If product is not registered we should fail with some custom exception. This scenario has to be covered.
 We also need to validate if we can set our products code list to null.
+
+Q: How to apply multiple discounts to the same product?
+
+A: Currently we can apply multiple discounts per product but they will be applied one after another. It is better to also support another scenario when only discount could be selected per product but
+the one with the biggest discount value. So we can define some kind of field which going to store discount appliement type and then define discount applier component which will handle this scenario.
