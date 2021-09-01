@@ -88,7 +88,7 @@ There might be some other important questions which you should ask but I asked t
 
 ### Define the development plan
 
-It is important to build up a plan who you want to proceed with the task implementation. It is good to start from some simplified approach and improve it over time to cover requirements.
+It is important to build up a plan how you want to proceed with the task implementation. It is good to start from some simplified approach and improve it over time to cover requirements.
 I decided to start from building the simple algorithm of calculating total for my shopping cart which would be just a multiplication of price and quantity of each product.
 When this simple scenario will be covered I can proceed with discounts implementation.
 
@@ -96,18 +96,19 @@ When this simple scenario will be covered I can proceed with discounts implement
 
 If you want to follow Test-Driven Development (TDD) approach at full scale - you have to write failing test first and than make it green.
 From other perspective we want to start defining primitives for our domain-model like 'Product', 'ShoppingCart', 'CartItem'.
-So it is up to you define from what you want to start. I started from defining primitives and than wrote some tests.
+So it is up to you to define from what you want to start. I started from defining primitives and than wrote some tests.
 
 #### ShoppingProduct
 
 Based on requriements a ShoppingProduct can be defined as an object which has ProductId ('A','B','C','D') and Price (50,30,20,15). 
 Since the concept of SKU was defined in requirements as an individual letter of an alphabet, I decided to use 'char' type to define ProductId.
-Since Price should store amount of money which one should pay for the product it is better to use decimal type for this field.
+But it is important to mention that in real system the ProductId field will be either string or GUID.
+since Price should store amount of money which one should pay for the product it is better to use decimal type for this field.
 To follow Open-Close principle we dont want to allow changes in ShoppingProduct fields so we define ProductId and Price as read-only properies.
 
 #### CartItem
 
-The responsibility of this entity is to store the quantity of specific product on our shopping cart and provide an interface to increase this quantity.
+The responsibility of this entity is to store the quantity of specific product in our shopping cart and provide an interface to increase this quantity.
 
 #### ShoppingCart
 
@@ -118,4 +119,23 @@ Since we have unique identifier for the product we can use it as a Dictionary ke
 
 The main responsibility of this class is to calculate the total price for products in our ShoppingCart. This class was already added when I started to work on the task.
 The only thing which has to be discussed regarding this class is the type of value which is get returned from GetTotal function. As I already mentioned it was double
-but it is better to use decimal for money calculations.
+but it is better to use decimal for money calculations. We are using string as an import parameter to GetTotal method and our ProductId is 1 symbol of that string.
+We can iterate over chars in that string and try to add it into the ShoppingCart. When all required items added, we should calculate Total by multiplying each cart item
+quantity to its price.
+
+### Some real tests
+
+Now we are ready to define a failing test to calculate total. At this moment I realized that I dont have any component which will store all types of products
+with its prices. I created IProductRepository interface for that. Also, in test project I added Stubs folder and implemented TestProductRepository which
+stores values in Dictionary. In real system actual implementation will use database for that purpose but for tests we are using in-memory version.
+We also have to update our Checkout component and add IProductRepository as constructor parameter so it could be injected outside using DI Container in future.
+In our test class, we are going to create an instance of TestProductRepository and fill it products and prices which we have in our requirements.
+When this will be done we should be able to run the test and make it green.
+
+### Implement discounts
+
+Strategy pattern.
+
+### Cover edge cases
+
+Can I break your component somehow?
