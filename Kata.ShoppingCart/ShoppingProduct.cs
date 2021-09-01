@@ -2,8 +2,8 @@
 {
     public class ShoppingProduct
     {
-        public char ProductId { get; private set; }
-        public decimal Price { get; private set; }
+        public char ProductId { get; }
+        public decimal Price { get; }
 
         public ShoppingProduct(char productId, decimal price)
         {
